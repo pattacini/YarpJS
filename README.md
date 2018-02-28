@@ -46,11 +46,13 @@ The library is based on node.js which can be natively integrated with external C
 * [Firefox](https://www.mozilla.org/en-US/firefox/products/)
 
 **Server dependencies**: 
-* [YARP](https://github.com/robotology/yarp) (Duh!). With OpenCV!
+* [OpenCV](https://docs.opencv.org/trunk/d7/d9f/tutorial_linux_install.html)
+* [YARP](https://github.com/robotology/yarp) (Duh!). With OpenCV settings.
 * [node.js](https://nodejs.org/en/). Version >= 4.2.2. Follow the [official guide](https://nodejs.org/en/download/package-manager/). 
 
 **Note**: 
 - **Please make sure** that your Node version is >= 4.2.2
+- **Add OpenCV settings to YARP**: in your `yarp/build` directory rerun `ccmake ..`; set `CREATE_DEVICE_LIBRARY_MODULES ON`, then set `OpenCV_DIR` to your open cv directory (for example, /usr/local/share/OpenCV). Then re-run `sudo make install`. 
 - **Linux**. If you installed Node.js from the package manager, it could happen that the command `node` is not in your path, but rather `nodejs` is. To this end, run `$> sudo ln -s /usr/bin/nodejs /usr/bin/node`.
 
 
