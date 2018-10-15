@@ -99,14 +99,16 @@ NAN_METHOD(YarpJS_Image::GetObjType) {
 NAN_METHOD(YarpJS_Image::GetHeight) {
   YarpJS_Image* obj = Nan::ObjectWrap::Unwrap<YarpJS_Image>(info.This());
 
-  info.GetReturnValue().Set(obj->getYarpObj()->height());
+  int height = obj->getYarpObj()->height(); 
+  info.GetReturnValue().Set(height);
 }
 
 
 NAN_METHOD(YarpJS_Image::GetWidth) {
   YarpJS_Image* obj = Nan::ObjectWrap::Unwrap<YarpJS_Image>(info.This());
 
-  info.GetReturnValue().Set(obj->getYarpObj()->width());
+  int width = obj->getYarpObj()->width();
+  info.GetReturnValue().Set(width);
 }
 
 
