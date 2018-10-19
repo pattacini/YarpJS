@@ -17,9 +17,6 @@ process.on('SIGTERM',function(){
 
 
 
-
-
-
 // just open the network once
 yarp.Network = new _yarp.Network();
 process.on('exit',function(){

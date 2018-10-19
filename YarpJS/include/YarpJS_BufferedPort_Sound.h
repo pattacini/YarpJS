@@ -29,6 +29,9 @@ private:
         Nan::SetPrototypeMethod(tpl,"write",Write);
         Nan::SetPrototypeMethod(tpl,"prepare",Prepare);
 
+	//HERE
+        Nan::SetPrototypeMethod(tpl,"setStrict",SetStrict);
+        //Nan::SetPrototypeMethod(tpl,"writeStrict",WriteStrict);  not working
 
         // Nan::SetPrototypeMethod(tpl,"onRPC",SetOnRPCCallback);
         // Nan::SetPrototypeMethod(tpl,"reply",Reply);
@@ -60,6 +63,10 @@ public:
     static NAN_METHOD(SetOnReadCallback);
     static NAN_METHOD(Write);
     static NAN_METHOD(Prepare);
+
+    //HERE
+    static NAN_METHOD(SetStrict);
+    //static NAN_METHOD(WriteStrict); not working
 
     // static NAN_METHOD(SetOnRPCCallback);
     // static NAN_METHOD(Reply);
