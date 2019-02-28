@@ -114,15 +114,21 @@ NAN_METHOD(YarpJS_BufferedPort_Sound::SetStrict) {
   obj->setStrict();
 }
 
-// not working
-//NAN_METHOD(YarpJS_BufferedPort_Sound::WriteStrict) { 
+//not working
+NAN_METHOD(YarpJS_BufferedPort_Sound::WriteStrict) { 
 
-//  YarpJS_BufferedPort_Sound* obj = Nan::ObjectWrap::Unwrap<YarpJS_BufferedPort_Sound>(info.This());
+  YarpJS_BufferedPort_Sound* obj = Nan::ObjectWrap::Unwrap<YarpJS_BufferedPort_Sound>(info.This());
 
-  //HERE
-//  obj->writeStrict();
-//}
+//HERE
+  obj->writeStrict();
+}
 
+NAN_METHOD(YarpJS_BufferedPort_Sound::WaitForWrite) {
+
+  YarpJS_BufferedPort_Sound* obj = Nan::ObjectWrap::Unwrap<YarpJS_BufferedPort_Sound>(info.This());
+
+  obj->waitForWrite();
+}
 
 
 // NAN_METHOD(YarpJS_BufferedPort_Sound::Reply) {
