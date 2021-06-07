@@ -11,7 +11,7 @@
 #include "YarpJS_Wrapper.h"
 #include <yarp/sig/Image.h>
 
-#include <cv.h>
+#include <yarp/cv/Cv.h>
 
 #define PNG     0
 #define JPG     1
