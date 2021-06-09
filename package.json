@@ -8,7 +8,7 @@
     "express": "latest",
     "jquery": "latest",
     "nan": "latest",
-    "socket.io": "latest",
+    "socket.io": "1.5.1",
     "socket.io-stream": "latest",
     "three": ">=0.125.0"
   },
