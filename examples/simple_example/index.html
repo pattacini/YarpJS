@@ -1,9 +1,54 @@
 <!doctype html>
 <html>
   <head>
-    <title>yarp.js Speech Recognition Example</title>
+    <title>yarp.js Simple Example</title>
 
     <meta name=viewport content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <style>
+      .cont {
+        text-align: center;
+      }
+
+      .cont * {
+        display: inline-block;
+      }
+
+      .main {
+        margin-top: 4em;
+      }
+
+      .invisible {
+          display: none;
+      }
+
+      #description {
+          padding: 3em;
+      }
+
+      #description * {
+          text-align: left;
+      }
+
+      #description p {
+          font-size: 1.3em;
+          margin-top: 3em;
+      }
+
+      #description b {
+          font-weight: bold;
+          color: cornflowerblue;
+      }
+
+      #description h1 b {
+          font-family: 'Lobster', serif;
+      }
+
+    </style>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/yarp.js"></script>
@@ -16,31 +61,29 @@
 
 
     <!-- DOM element in charge of sending messages -->
-    <form action = "" id='form-send-message' class="form-inline" style="margin-bottom: 1em">      
+    <form action = "" id='form-send-message' class="form-inline" style="margin-bottom: 1em">
 
       <input type="text" class="form-speak" id="input-send-message" placeholder="Hello yarp js!" value='Hello yarp js!'>
 
       <button>Send!</button>
-  
+
     </form>
     <!--  -->
 
+    <!-- Initialization of socket.io and yarp.js -->
+    <script>
+
+      var socket = io();
+      yarp.init(socket);
+    </script>
 
 
-  <!-- Initialization of socket.io and yarp.js -->
-  <script>
+    <!-- yarp.js "main" -->
+    <script>
 
-    var socket = io();    
-     yarp.init(socket);
-  </script>
+      // as soon as the yarp.js module is ready...
+      yarp.onInit(function() {
 
-
-  <!-- yarp.js "main" -->
-  <script>
-
-    // as soon as the yarp.js module is ready...
-    yarp.onInit(function() {
-      
       // open ports for writing/reading
       let yarpjs_write_port = yarp.PortHandler.openPort('/yarpjs/simple_example:o');
       let yarpjs_read_port = yarp.PortHandler.openPort('/yarpjs/simple_example:i');
@@ -48,9 +91,10 @@
 
       // whenever a message is read, print it on screen
       yarpjs_read_port.onRead(function(msg){
-        
-        (msg.content);
-        
+
+        theDescription = document.getElementById('description');
+        theDescription.innerHTML = theDescription.innerHTML + (msg.content);
+
       });
 
 
@@ -61,7 +105,7 @@
       // get the handler to the DOM element containing the message to be sent
       let input = document.getElementById('input-send-message');
 
-      // whenever the message is sent (either by pressing the form button 
+      // whenever the message is sent (either by pressing the form button
       // or by pressing enter in the text box), send the message.
       form.addEventListener("submit", function(event){
             event.preventDefault();
@@ -69,46 +113,32 @@
         });
       });
 
+    </script>
 
-  </script>
+    <div class='cont main'>
 
+      <!--  Description -->
+      <div id="description">
 
+        <h1> yarp.js Simple Example </h1>
 
+        <p>
+          This example shows how to send and receive messages with yarp.js. It opens two ports: <b>'/yarpjs/simple_example:o'</b> and <b>'/yarpjs/simple_example:i'</b>.
+        </p>
 
+        <p>
+          Whenever a message is written from the yarp network to <b>'/yarpjs/simple_example:i'</b>, the message is printed on screen.
+        </p>
 
-    <!--  Description -->
-    <div>
-      <h1>Simple Example</h1>
-           
-      <p>
-        This example shows how to send and receive messages with yarp.js. It opens two ports: <b>'/yarpjs/simple_example:o'</b> and <b>'/yarpjs/simple_example:i'</b>.
+        <p>
+          Whenever a message is written in the text box above (and the user sends it), the corresponding message is sent to any port on the yarp network reading connected to <b>'/yarpjs/simple_example:o'</b>.
+        </p>
 
-      </p>
-      <p>
-
-        Whenever a message is written from the yarp network to <b>'/yarpjs/simple_example:i'</b>, the message is printed on screen.
-
-      </p>
-
-
-      <p>
-        Whenever a message is written in the text box above (and the user sends it), the corresponding message is sent to any port on the yarp network reading connected to <b>'/yarpjs/simple_example:o'</b>.
-      </p>
+      </div>
 
     </div>
 
   </body>
-  
- 
 
-  
 
 </html>
-
-
-
-
-
-
-
-
