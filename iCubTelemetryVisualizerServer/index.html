@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <head>
+    <title>yarp.js Publish Inertial Data</title>
+
+    <meta name=viewport content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+    <style>
+      .cont {
+        text-align: center;
+      }
+
+      .cont * {
+        display: inline-block;
+      }
+
+      .main {
+        margin-top: 4em;
+      }
+
+      .invisible {
+          display: none;
+      }
+
+      #description {
+          padding: 3em;
+      }
+
+      #description * {
+          text-align: left;
+      }
+
+      #description p {
+          font-size: 1.3em;
+          margin-top: 3em;
+      }
+
+      #description b {
+          font-weight: bold;
+          color: cornflowerblue;
+      }
+
+      #description h1 b {
+          font-family: 'Lobster', serif;
+      }
+
+    </style>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/yarp.js"></script>
+
+  </head>
+
+
+<!-- ############  BODY ################# -->
+
+  <body>
+    <div class='main cont'>
+    <div id='description'>
+      <div class='closebutton'>x</div>
+
+      <h1>Publish Inertial Data</h1>
+
+      <p>
+        This service provides inertial data received from the robot iCub through the YARP port <b>/icubSim/inertial</b>.
+      </p>
+
+      <p>
+        Data received from port:
+      </p>
+    </div>
+
+    <div id='port-imu-in-data'></div>
+  </div>
+  </body>
+
+<!-- ############  END BODY ################# -->
+
+  <script src="/jquery/dist/jquery.min.js"></script>
+  <script src="/yarp.js"></script>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <script>
+    var socket = io();
+    yarp.init(socket);
+  </script>
+
+  <script>
+    var port_imu_in_data = document.getElementById('port-imu-in-data');
+
+    var t_prev = Date.now();
+
+    // what to do as soon as the yarp module is ready
+    yarp.onInit(function() {
+      var port_imu_in_name = '/yarpjs/inertial:i';
+      var port_imu_in = yarp.PortHandler.openPort(port_imu_in_name);
+
+      port_imu_in.onRead(function(bottle){
+        port_imu_in_data.innerHTML = bottle.content;
+        t_prev = Date.now();
+      });
+
+      yarp.Network.connect('/icubSim/inertial',port_imu_in_name);
+    });
+  </script>
+
+</html>
