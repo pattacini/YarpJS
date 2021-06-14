@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>YarpJS Stream Audio</title>
-    
 
     <meta name=viewport content="width=device-width, initial-scale=1">
 
@@ -12,10 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="/jquery/dist/jquery.min.js"></script>  
+    <script src="/jquery/dist/jquery.min.js"></script>
     <script src="/yarp.js"></script>
-
-
 
     <style>
       .cont {
@@ -40,7 +37,6 @@
         height: 240px;
         width: 320px;
       }
-
 
       .invisible {
           display: none;
@@ -75,10 +71,9 @@
         margin-top: 1em;
       }
 
-
       #description b.danger {
           color: crimson;
-      } 
+      }
 
       #description ul {
         font-size: 1.3em;
@@ -88,9 +83,7 @@
       #description p.danger {
           margin: 2em;
           color: crimson;
-      } 
-
-
+      }
 
       #description h1 {
         display: block;
@@ -101,7 +94,6 @@
         margin-bottom: 0;
         font-size: 1.3em;
       }
-
 
     </style>
   </head>
@@ -117,8 +109,8 @@
         <div class='cont'>
           <!-- <img id='stream-video'/> -->
           <canvas id='stream-video'></canvas>
-        
-          <form action = "" id='form-connect-stream-video' class="form-inline" style="margin-bottom: 1em">      
+
+          <form action = "" id='form-connect-stream-video' class="form-inline" style="margin-bottom: 1em">
 
             <input type="text" class="form-stream-video" id="input-connect-stream-video" placeholder="/robot/cam:o" value='/robot/cam:o'>
 
@@ -133,21 +125,19 @@
           <p id='warning-connection' class='danger invisible'>
             There is already a connection to this port. Please disconnect and reload.
           </p>
-        
+
           <h1>Stream Video</h1>
 
           <p>
             This examples shows how to read and visualize images from the YARP network. This demo opens a port <b>/yarpjs/img:i</b>. Images sent to this port are visualized on this page.
           </p>
 
-       
           <p>
             <b class='danger'>Limited Support:</b> for security reasons, Chrome does not allow to access the audio/video stream from unsecure hosts (https Vs http). To bypass this issue you can use a <b>self-signed SSL</b> secure domain (see <a href='https://github.com/robotology/yarp.js/tree/master/examples#secure-domains'>here</a>!)
               </li>
             </ul>
           </p>
         </div>
-
 
     </div>
 
@@ -164,7 +154,6 @@
 
   <script>
 
-    
     var video_stream_element = document.getElementById('stream-video');
     var btn_connect_video_stream = document.getElementById('btn-connect-stream-video');
     var input_connect_video_stream = document.getElementById('input-connect-stream-video');
@@ -174,7 +163,6 @@
 
     var connected = false;
     var initialized = false;
-
 
     var g_img = undefined;
 
@@ -191,7 +179,6 @@
         // video_stream_element.setAttribute('src',yarp.getImageSrc(g_img.compression_type,g_img.buffer));
       }
 
-
       // console.log(d.getTime()-curr_time);
       // write_time.innerHTML = Date.now()-curr_time;
       curr_time = Date.now();
@@ -203,7 +190,7 @@
 
     // what to do as soon as the yarp module is ready
     yarp.onInit(function() {
-      
+
       var port_video_in_name = '/yarpjs/img:i';
       var port_click_out_name = '/yarpjs/img/click:o';
 
@@ -215,7 +202,7 @@
       var t1 = Date.now();
       port_video_in.onRead(function(img){
 
-        // if is not connected but it is reading something, then there is a problem. 
+        // if is not connected but it is reading something, then there is a problem.
         if(!connected && !initialized)
         {
           form_connect_video_stream.classList.add('invisible');
@@ -232,7 +219,7 @@
       function toggleConnection() {
 
         var port_src = input_connect_video_stream.value;
-          
+
         if(!connected)
         {
           input_connect_video_stream.setAttribute('disabled','true');
@@ -264,11 +251,8 @@
           event.preventDefault();
           toggleConnection();
       });
-        
 
     });
-
-
 
     video_stream_element.addEventListener('click', function() {
 
@@ -283,13 +267,4 @@
 
   </script>
 
-
 </html>
-
-
-
-
-
-
-
-

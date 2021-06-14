@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>yarp.js Send and Receive Inertial Data</title>
-    
 
     <meta name=viewport content="width=device-width, initial-scale=1">
 
@@ -11,10 +10,8 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
-
-
     <style type="text/css">
-      
+
       .flex-container {
           display:flex;
           flex-direction: column;
@@ -25,8 +22,7 @@
           width:100%;
           height:100%;
       }
-          
-       
+
        .flex-control-panel{
           display: flex;
           flex-direction: column;
@@ -37,7 +33,7 @@
           flex-shrink: 0;
           /*flex-basis: 60%;*/
         }
-        
+
        .flex-console {
           margin-top:1em;
           width: 100%;
@@ -56,11 +52,12 @@
           padding-top: 0.4em;
           height: 13em;
       }
+
       .reply-from-server
       {
           color: tomato;
       }
-       
+
       .flex-commands {
           display: flex;
           flex-direction: row;
@@ -71,30 +68,35 @@
           flex-shrink: 1;
           margin-top: 1em;
       }
+
       .flex-commands > form
       {
         padding-left:1em;
-        padding-right:1em; 
+        padding-right:1em;
       }
+
        .flex-button-container
        {
           display: flex;
           flex-direction: row;
           justify-content: flex-start;
-    
-          background-color: white; 
-          
+
+          background-color: white;
+
           padding-left:1em;
           padding-right:1em;
           flex-grow:1;
        }
-        .flex-button-container:nth-child(odd) 
+
+        .flex-button-container:nth-child(odd)
         {
-          background-color: #eee; 
+          background-color: #eee;
         }
+
         .btn{
           font-size: 1.5em;
         }
+
        .flex-button
        {
           margin: 1em;
@@ -103,7 +105,6 @@
           flex-basis: 0;
           font-size:1em;
        }
-
 
       .garden {
         margin-top:2em;
@@ -126,8 +127,6 @@
         background: green;
         border-radius: 100%;
       }
-
-
 
       #canvas-container {
         display: flex;
@@ -170,7 +169,6 @@
           font-family: 'Lobster', serif;
       }
 
-
       /* custom stuff */
       #description {
         padding: 1em;
@@ -181,7 +179,7 @@
         opacity: 0.9;
         border-radius: 1em;
         margin:1em;
-      } 
+      }
 
       #description p {
         margin-top: 1em;
@@ -195,7 +193,6 @@
         right: 0;
         top: 0;
         margin-right: 0.5em;
-
         cursor:pointer;
       }
 
@@ -211,7 +208,6 @@
         margin-top: 3em;
         margin-bottom: 1em;
       }
-
 
       #megacanvas {
         margin-top: 4em;
@@ -231,8 +227,6 @@
 <!-- ############  BODY ################# -->
 
   <body>
-
-    
     <div id='description'>
       <div class='closebutton'>x</div>
 
@@ -240,7 +234,7 @@
 
       <p>
         This demo shows how information send on the <b>YARP</b> network can be visualized with tools available in modern browsers. In particular we will use <a target='_blank' href='https://developers.google.com/chart/'>Google Charts</a> and <a target='_blank' href='http://threejs.org/'>Three.js</a> to visualize the current orientation of a device streaming inertial data over the <b>YARP network</b>.
-      </p> 
+      </p>
 
       <p>
         You will need <b>two devices</b>: one equipped with inertial sensing capabilities, which will write on the YARP network a 3 dimensional vector containing the device orientation. A second device will read this information from the network and visualized it on screen.
@@ -252,62 +246,37 @@
 
     </div>
 
-
-
-
     <div id='send_inertial_data_container' class='cont invisible'>
       <!-- <a id='' class="btn btn-lg disabled">Send Data</a> -->
       <button id='send_inertial_data' type="button" class="btn" data-toggle="button" aria-pressed="false" autocomplete="off">
             Send Data
-      </button> 
+      </button>
     </div>
-    
+
     <div id="canvas-container">
       <canvas id="megacanvas"></canvas>
     </div>
 
     <div id="chart_div"></div>
-    
   </body>
 
 <!-- ############  END BODY ################# -->
 
-
-
-
-
-
   <script src="/jquery/dist/jquery.min.js"></script>
   <script src="/three/build/three.js"></script>
-  
   <script src="/yarp.js"></script>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-
-
   <script>
-    var socket = io();    
-
+    var socket = io();
     yarp.init(socket);
-
   </script>
 
-
-
-
   <script>
-
-
-
-
     // what to do as soon as the yarp module is ready
     yarp.onInit(function() {
-
-
       var sending_inertial_data = false;
-
-
 
       var port_orientation_out = yarp.PortHandler.openPort('/yarpjs/device/orientation:o');
       var port_acceleration_out = yarp.PortHandler.openPort('/yarpjs/device/acceleration:o');
@@ -316,59 +285,36 @@
       var port_acceleration_in = yarp.PortHandler.openPort('/yarpjs/device/acceleration:i');
 
       port_orientation_in.onRead(function(bottle){
-
-
-
         var orientation = bottle.content;
-
         drawData(orientation);
-
-
         if(!sending_inertial_data)
           chartData(orientation);
-
       });
-
-
 
       yarp.Network.connect('/yarpjs/device/orientation:o','/yarpjs/device/orientation:i');
       yarp.Network.connect('/yarpjs/device/acceleration:o','/yarpjs/device/acceleration:i');
 
-
-
       var send_inertial_data_btn = document.getElementById('send_inertial_data');
-
 
       var orientation_listener_initialized = false;
 
       if (window.DeviceOrientationEvent) {
-
-
           function detect_deviceorientation() {
-
             if( !orientation_listener_initialized )
             {
-
               if(event.alpha == null || event.beta == null || event.gamma==null)
                 return;
-
               window.removeEventListener("deviceorientation", detect_deviceorientation);
               document.getElementById('send_inertial_data_container').classList.remove('invisible');
-
               orientation_listener_initialized = true;
             }
-
           }
-
 
           window.addEventListener("deviceorientation", detect_deviceorientation, true);
 
-
           window.addEventListener("deviceorientation", function send_deviceorientation () {
-            
             if( sending_inertial_data )
             {
-              
               var alpha = event.alpha;
               var beta = event.beta;
               var gamma = event.gamma;
@@ -376,15 +322,12 @@
               // setTimeout(function(){
                 port_orientation_out.write([alpha,beta,gamma]);
               // },1);
-
             }
           }, true );
 
           window.addEventListener('devicemotion', function send_devicemotion() {
-            
             if( sending_inertial_data )
             {
-
               var x = event.acceleration.x;
               var y = event.acceleration.y;
               var z = event.acceleration.z;
@@ -392,31 +335,19 @@
               // setTimeout(function(){
                 port_acceleration_out.write([x,y,z]);
               // },1);
-
             }
           }, true );
 
           send_inertial_data_btn.onclick = function toggle_sending() {
-
-            //close the ports but only locally 
+            //close the ports but only locally
             // port_orientation_in.close(true);
             // port_acceleration_in.close(true);
-
 
             send_inertial_data_btn.classList.toggle('btn-primary');
             sending_inertial_data = !sending_inertial_data;
           }
       }
-
-
-
     });
-
-
-
-
-
-
 
   </script>
 
@@ -425,7 +356,6 @@
   <script>
     google.charts.load('current', {packages: ['corechart', 'line']});
     google.charts.setOnLoadCallback(_initData);
-
 
     var chart = undefined;
     var data = undefined;
@@ -442,11 +372,10 @@
     };
 
     function drawLineColors() {
-      
-      chart.draw(data_view, options);
- 
-    }
 
+      chart.draw(data_view, options);
+
+    }
 
     function _initData()
     {
@@ -464,14 +393,11 @@
       drawLineColors();
     }
 
-
-
     var max_length = 30;
     var curr_idx = 0;
 
     var datum;
     function _chartData() {
-      
       if(datum != undefined && data != undefined)
       {
         datum.unshift(curr_idx);
@@ -489,7 +415,6 @@
       setTimeout(_chartData,30);
     }
     _chartData();
-
 
     function chartData(orientation) {
       if(datum == undefined)
@@ -523,7 +448,7 @@
     //   if (x >  90) { x =  90};
     //   if (x < -90) { x = -90};
 
-    //   // To make computation easier we shift the range of 
+    //   // To make computation easier we shift the range of
     //   // x and y to [0,180]
     //   x += 90;
     //   y += 90;
@@ -534,10 +459,7 @@
     //   ball.style.left = (maxY*y/180 - 10) + "px";
     // }
 
-
   </script>
-
-
 
   <!-- Three.js -->
   <script>
@@ -561,7 +483,6 @@
       var q0 = new THREE.Quaternion(); // - PI/2 around the x-axis
       var q1 = new THREE.Quaternion(- Math.sqrt(0.5), 0, 0, Math.sqrt(0.5));
 
-
       var scene, camera, renderer, controls;
       var cellphone, material;
 
@@ -569,15 +490,14 @@
       animate();
 
       function init() {
-
           scene = new THREE.Scene();
-          
+
           camera = new THREE.PerspectiveCamera( 45, 1, 1, 2000 );
           camera.applyMatrix( new THREE.Matrix4().makeTranslation( 0,0,200 ) );
           // camera.applyMatrix( new THREE.Matrix4().makeRotationX( 0 ) );
           // camera.position.y = 400;
 
-          camera.lookAt( scene.position );    
+          camera.lookAt( scene.position );
 
           scene.add( new THREE.AmbientLight( 0x404040 ) );
 
@@ -586,8 +506,7 @@
             scene.add( light );
 
 
-            var pointLight =
-              new THREE.PointLight(0xFFFFFF);
+            var pointLight = new THREE.PointLight(0xFFFFFF);
 
             // set its position
             pointLight.position.x = 10;
@@ -597,13 +516,10 @@
             // add to the scene
             scene.add(pointLight);
 
-
             var textureLoader = new THREE.TextureLoader();
 
-
-
             var cellmaterial = new THREE.MeshLambertMaterial( {color: 0x274EC0 } );
-            var smartface = new THREE.MeshLambertMaterial({ color:0xffffff, map: textureLoader.load( 'images/smartface.png' ) });         
+            var smartface = new THREE.MeshLambertMaterial({ color:0xffffff, map: textureLoader.load( 'images/smartface.png' ) });
 
             var bkgMaterial = new THREE.MeshLambertMaterial( {color: 0xD4D6D8} );
             var bkgGeometry = new THREE.BoxGeometry( 1000, 1000, 5 , 1 , 1 , 1);
@@ -619,7 +535,7 @@
 
           for(var i = 0; i < geometry.faces.length; i++)
             geometry.faces[i].materialIndex = 0;
-          
+
           geometry.faces[8].materialIndex = 1;
           geometry.faces[9].materialIndex = 1;
 
@@ -634,27 +550,23 @@
           // cellphone.position.set( -200, 0, 0 );
           scene.add( cellphone );
 
-          
+
           var renderer_options = {};
           renderer_options.canvas = document.getElementById("megacanvas");
           renderer_options.antialias = true;
 
           renderer = new THREE.WebGLRenderer(renderer_options);
-          
+
           var w_gain = 0.35;
           var w_size = Math.floor(w_gain*window.innerWidth);
           renderer.setSize(w_size,w_size);
           renderer.setPixelRatio( window.devicePixelRatio );
-
       }
 
 
       function animate() {
-
         requestAnimationFrame( animate );
-
         render();
-
       }
 
 
@@ -663,15 +575,11 @@
       }
 
       function drawData(orientation) {
-
-
-
         // 'ZXY' for the device, but 'YXZ' for us
         euler.set(deg2rad(orientation[1]), deg2rad(orientation[0]), - deg2rad(orientation[2]), 'YXZ');
 
         quaternion.setFromEuler(euler);
         quaternionLerp.slerp(quaternion, 0.5); // interpolate
-
 
         if (autoAlign) orientationQuaternion.copy(quaternion); // interpolation breaks the auto alignment
         else orientationQuaternion.copy(quaternionLerp);
@@ -684,17 +592,13 @@
 
         cellphone.quaternion.copy(alignQuaternion);
         cellphone.quaternion.multiply(orientationQuaternion);
-
       }
-
 
       function deg2rad(val) {
-          return val * Math.PI / 180;  
+          return val * Math.PI / 180;
       }
-      
 
   </script>
-
 
   <script>
 
@@ -704,7 +608,6 @@
       description_object.classList.add('invisible');
     }
 
-    
     var route_parameters = location.search.substring(1).split("&");
 
     var description_visible = false;
@@ -725,11 +628,3 @@
   </script>
 
 </html>
-
-
-
-
-
-
-
-
