@@ -168,7 +168,6 @@
 
     var virtual_img = new Image();
 
-    var curr_time = Date.now();
     var write_time = document.getElementById('write-time');
 
     function tmp_visual() {
@@ -176,12 +175,7 @@
       {
         virtual_img.src = yarp.getImageSrc(g_img.compression_type,g_img.buffer);
         video_stream_element.getContext('2d').drawImage(virtual_img,0,0);
-        // video_stream_element.setAttribute('src',yarp.getImageSrc(g_img.compression_type,g_img.buffer));
       }
-
-      // console.log(d.getTime()-curr_time);
-      // write_time.innerHTML = Date.now()-curr_time;
-      curr_time = Date.now();
 
       setTimeout(tmp_visual,33);
     }
@@ -195,7 +189,6 @@
       var port_click_out_name = '/yarpjs/img/click:o';
 
       port_click_out = yarp.PortHandler.openPort(port_click_out_name,'bottle');
-
       var port_video_in = yarp.PortHandler.openPort(port_video_in_name,'image');
 
 
