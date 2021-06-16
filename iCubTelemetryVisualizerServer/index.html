@@ -64,7 +64,7 @@
     <div id='description'>
       <div class='closebutton'>x</div>
 
-      <h1>Publish Inertial Data</h1>
+      <h1>Published iCub Telemetry Data</h1>
 
       <p>
         This service provides inertial data received from the robot iCub through the YARP port <b>/icubSim/inertial</b>.
@@ -83,6 +83,7 @@
 
   <script src="/jquery/dist/jquery.min.js"></script>
   <script src="/yarp.js"></script>
+  <script src="/iCubTelemetryVisualizerServer/server.js"></script>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -103,6 +104,7 @@
 
       port_imu_in.onRead(function(bottle){
         port_imu_in_data.innerHTML = bottle.content;
+        icubtelemetry.updateState();
         t_prev = Date.now();
       });
 
