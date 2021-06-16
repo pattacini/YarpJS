@@ -1,10 +1,10 @@
 /*
- Spacecraft.js simulates a small spacecraft generating telemetry.
+ icubtelemetry.js simulates a small spacecraft generating telemetry.
 */
 
 function ICubTelemetry() {
     this.state = {
-        "sens.imu": [0,0,0,0,0,0,0,0,0,0,0,0]
+        "sens.imu": 0
     };
     this.history = {};
     this.listeners = [];
@@ -12,16 +12,17 @@ function ICubTelemetry() {
         this.history[k] = [];
     }, this);
 
+    const ONE_SECOND_REPEAT_INTERVAL = 1000;
     setInterval(function () {
-/*        this.updateState();*/
+        this.updateState();
         this.generateTelemetry();
-    }.bind(this), 1000);
+    }.bind(this), ONE_SECOND_REPEAT_INTERVAL);
 
     console.log("iCub Telemetry server launched!");
 };
 
-Spacecraft.prototype.updateState = function () {
-    this.state["sens.imu"] = [1,1,1,1,1,1,1,1,1,1,1,1];
+ICubTelemetry.prototype.updateState = function () {
+    this.state["sens.imu"] = 10;
 };
 
 /**
@@ -34,7 +35,6 @@ ICubTelemetry.prototype.generateTelemetry = function () {
         var state = { timestamp: timestamp, value: this.state[id], id: id};
         this.notify(state);
         this.history[id].push(state);
-        this.state["comms.sent"] += JSON.stringify(state).length;
     }, this);
 };
 

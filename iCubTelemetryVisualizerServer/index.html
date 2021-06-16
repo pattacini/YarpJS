@@ -104,7 +104,6 @@
 
       port_imu_in.onRead(function(bottle){
         port_imu_in_data.innerHTML = bottle.content;
-        icubtelemetry.updateState();
         t_prev = Date.now();
       });
 
