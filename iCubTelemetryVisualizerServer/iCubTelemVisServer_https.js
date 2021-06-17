@@ -1,4 +1,4 @@
-// examples_https.js
+// Server https (secure)
 
 // require yarp.js
 var yarp = require('../yarp');
