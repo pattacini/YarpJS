@@ -21,6 +21,29 @@ app.get('/', function(req, res){
   res.sendFile('index.html',{ root : __dirname});
 });
 
+// Basic implementation of a history and realtime server.
+var ICubTelemetry = require('./icubtelemetry');
+var RealtimeServer = require('./realtime-server');
+var HistoryServer = require('./history-server');
+
+var icubtelemetry = new ICubTelemetry();
+var realtimeServer = new RealtimeServer(icubtelemetry);
+var historyServer = new HistoryServer(icubtelemetry);
+
+// Setup 'express-ws' in order to add WebSocket routes
+var expressWs = require('express-ws');
+expressWs(app);
+app.use('/realtime', realtimeServer);
+app.use('/history', historyServer);
+
+var port = process.env.PORT || 8080
+
+// Start history and realtime servers
+app.listen(port, function () {
+    console.log('ICubTelemetry History hosted at http://localhost:' + port + '/history');
+    console.log('ICubTelemetry Realtime hosted at ws://localhost:' + port + '/realtime');
+});
+
 // start the server!
 http.listen(3000, function(){
   console.log('listening on *:3000');
