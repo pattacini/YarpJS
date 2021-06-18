@@ -26,13 +26,14 @@ var ICubTelemetry = require('./icubtelemetry');
 var RealtimeServer = require('./realtime-server');
 var HistoryServer = require('./history-server');
 
-var icubtelemetry = new ICubTelemetry();
-var realtimeServer = new RealtimeServer(icubtelemetry);
-var historyServer = new HistoryServer(icubtelemetry);
-
 // Setup 'express-ws' in order to add WebSocket routes
 var expressWs = require('express-ws');
 expressWs(app);
+
+// Create the servers
+var icubtelemetry = new ICubTelemetry();
+var realtimeServer = new RealtimeServer(icubtelemetry);
+var historyServer = new HistoryServer(icubtelemetry);
 app.use('/realtime', realtimeServer);
 app.use('/history', historyServer);
 
