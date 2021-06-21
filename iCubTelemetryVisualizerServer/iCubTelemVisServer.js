@@ -1,6 +1,8 @@
 // Server http (non secure)
 
 // require and setup basic http functionalities
+var portTelemetryReqOrigin = process.env.PORT_TLM_REQ_ORIGIN || 8080
+var portTelemetryRespOrigin = process.env.PORT_TLM_RSP_ORIGIN || 8081
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -37,12 +39,10 @@ var historyServer = new HistoryServer(icubtelemetry);
 app.use('/realtime', realtimeServer);
 app.use('/history', historyServer);
 
-var port = process.env.PORT || 8080
-
 // Start history and realtime servers
-app.listen(port, function () {
-    console.log('ICubTelemetry History hosted at http://localhost:' + port + '/history');
-    console.log('ICubTelemetry Realtime hosted at ws://localhost:' + port + '/realtime');
+app.listen(portTelemetryRespOrigin, function () {
+    console.log('ICubTelemetry History hosted at http://localhost:' + portTelemetryRespOrigin + '/history');
+    console.log('ICubTelemetry Realtime hosted at ws://localhost:' + portTelemetryRespOrigin + '/realtime');
 });
 
 // start the server!

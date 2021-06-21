@@ -30,7 +30,7 @@ ICubTelemetry.prototype.updateState = function () {
  * listeners.
  */
 ICubTelemetry.prototype.generateTelemetry = function () {
-    var timestamp = Date.now(), sent = 0;
+    var timestamp = Date.now();
     Object.keys(this.state).forEach(function (id) {
         var state = { timestamp: timestamp, value: this.state[id], id: id};
         this.notify(state);
