@@ -5,6 +5,13 @@ var portTelemetryReqOrigin = process.env.PORT_TLM_REQ_ORIGIN || 8080
 var portTelemetryRespOrigin = process.env.PORT_TLM_RSP_ORIGIN || 8081
 var express = require('express');
 var app = express();
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:"+portTelemetryReqOrigin); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
