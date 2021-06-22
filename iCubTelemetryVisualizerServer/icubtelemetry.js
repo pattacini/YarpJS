@@ -6,6 +6,7 @@ function ICubTelemetry() {
     this.state = {
         "sens.imu": 0
     };
+    this.maxDepthSamples = 1000;
     this.history = {};
     this.listeners = [];
     Object.keys(this.state).forEach(function (k) {
@@ -34,6 +35,9 @@ ICubTelemetry.prototype.generateTelemetry = function () {
         var telemetrySample = { timestamp: timestamp, value: this.state[id], id: id};
         this.notify(telemetrySample);
         this.history[id].push(telemetrySample);
+        if (this.history[id].length > this.maxDepthSamples) {
+          this.history[id].shift();
+        }
     }, this);
 };
 

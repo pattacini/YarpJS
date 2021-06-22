@@ -48,10 +48,10 @@ app.use('/history', historyServer);
 
 // Open the Yarp ports and feed the data to the 'icubtelemetry' object
 var port_imu_in_name = '/yarpjs/inertial:i';
-var port_imu_in = yarp.portHandler.open(port_imu_in_name);
+var port_imu_in = yarp.portHandler.open(port_imu_in_name,'bottle');
 
 port_imu_in.onRead(function(bottle){
-  icubtelemetry.updateState(bottle.content);
+  icubtelemetry.updateState(bottle.toArray());
 });
 
 yarp.Network.connect('/icubSim/inertial',port_imu_in_name);
