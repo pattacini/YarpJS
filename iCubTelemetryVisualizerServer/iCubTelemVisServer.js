@@ -52,7 +52,6 @@ var port_imu_in = yarp.portHandler.open(port_imu_in_name);
 
 port_imu_in.onRead(function(bottle){
   icubtelemetry.updateState(bottle.content);
-  icubtelemetry.generateTelemetry();
 });
 
 yarp.Network.connect('/icubSim/inertial',port_imu_in_name);

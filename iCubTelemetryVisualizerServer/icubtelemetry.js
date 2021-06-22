@@ -12,6 +12,11 @@ function ICubTelemetry() {
         this.history[k] = [];
     }, this);
 
+    const TEN_MS_REPEAT_INTERVAL = 10;
+    setInterval(function () {
+        this.generateTelemetry();
+    }.bind(this), TEN_MS_REPEAT_INTERVAL);
+
     console.log("iCub Telemetry server launched!");
 };
 
