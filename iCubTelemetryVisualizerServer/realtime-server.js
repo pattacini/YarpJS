@@ -16,6 +16,7 @@ function RealtimeServer(device) {
                 }
             };
 
+        // Listener
         function notifySubscribers(point) {
             if (subscribed[point.id]) {
                 ws.send(JSON.stringify(point));

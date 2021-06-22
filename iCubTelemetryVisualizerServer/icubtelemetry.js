@@ -32,9 +32,9 @@ ICubTelemetry.prototype.updateState = function () {
 ICubTelemetry.prototype.generateTelemetry = function () {
     var timestamp = Date.now();
     Object.keys(this.state).forEach(function (id) {
-        var state = { timestamp: timestamp, value: this.state[id], id: id};
-        this.notify(state);
-        this.history[id].push(state);
+        var telemetrySample = { timestamp: timestamp, value: this.state[id], id: id};
+        this.notify(telemetrySample);
+        this.history[id].push(telemetrySample);
     }, this);
 };
 
