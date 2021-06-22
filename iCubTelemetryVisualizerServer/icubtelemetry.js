@@ -12,17 +12,11 @@ function ICubTelemetry() {
         this.history[k] = [];
     }, this);
 
-    const ONE_SECOND_REPEAT_INTERVAL = 1000;
-    setInterval(function () {
-        this.updateState();
-        this.generateTelemetry();
-    }.bind(this), ONE_SECOND_REPEAT_INTERVAL);
-
     console.log("iCub Telemetry server launched!");
 };
 
-ICubTelemetry.prototype.updateState = function () {
-    this.state["sens.imu"] = 10;
+ICubTelemetry.prototype.updateState = function (sensorSample) {
+    this.state["sens.imu"] = sensorSample;
 };
 
 /**

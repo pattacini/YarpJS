@@ -46,6 +46,17 @@ var historyServer = new HistoryServer(icubtelemetry);
 app.use('/realtime', realtimeServer);
 app.use('/history', historyServer);
 
+// Open the Yarp ports and feed the data to the 'icubtelemetry' object
+var port_imu_in_name = '/yarpjs/inertial:i';
+var port_imu_in = yarp.portHandler.open(port_imu_in_name);
+
+port_imu_in.onRead(function(bottle){
+  icubtelemetry.updateState(bottle.content);
+  icubtelemetry.generateTelemetry();
+});
+
+yarp.Network.connect('/icubSim/inertial',port_imu_in_name);
+
 // Start history and realtime servers
 app.listen(portTelemetryRespOrigin, function () {
     console.log('ICubTelemetry History hosted at http://localhost:' + portTelemetryRespOrigin + '/history');
