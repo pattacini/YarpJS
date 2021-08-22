@@ -42,7 +42,8 @@ yarp.Bottle = function Bottle(_bottle) {
 
         return {
             obj_type: _bottle.getObjType(),
-            content: _bottle.toObject()
+            content: _bottle.toObject(),
+            contentStr: _bottle.toString()
         };
     }
 
