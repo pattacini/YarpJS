@@ -4,22 +4,25 @@ var _yarp = require('./build/Release/YarpJS');
 var yarp = new Object();
 
 
-// make sure to close stuff when Ctrl+C arrives
-process.on('SIGINT',function(){
-    process.exit();
+// make sure to close stuff when Ctrl+C or closing signal arrives, but don't
+// force the process to exit, let it do on its own.
+// A second occurrence of the signal will be processed by the default handlers
+// and force stop the process (except for SIGQUIT).
+process.once('SIGINT',function(){
+    process.emit('exit');
 });
-
-
-// make sure to close stuff when closing signal arrives
-process.on('SIGTERM',function(){
-    process.exit();
+process.once('SIGTERM',function(){
+    process.emit('exit');
+});
+process.once('SIGQUIT',function(){
+    process.emit('exit');
 });
 
 
 
 // just open the network once
 yarp.Network = new _yarp.Network();
-process.on('exit',function(){
+process.once('exit',function(){
     yarp.Network.fini();
 });
 
@@ -199,7 +202,7 @@ yarp.Port = function Port(_port_type) {
 
 
     // make sure the port closes on exit (moreover this keeps the port from being inadvertently destroyed by te garbage collector)
-    process.on('exit', function _closeOnExit() {
+    process.once('exit', function _closeOnExit() {
         console.log(port_name);
         _port.close();
     });
