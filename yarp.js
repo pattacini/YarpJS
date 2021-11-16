@@ -202,10 +202,10 @@ yarp.Port = function Port(_port_type) {
 
 
     // make sure the port closes on exit (moreover this keeps the port from being inadvertently destroyed by te garbage collector)
-    process.once('exit', function _closeOnExit() {
-        console.log(port_name);
-        _port.close();
-    });
+    // process.once('exit', function _closeOnExit() {
+    //     console.log(port_name);
+    //     _port.close();
+    // });
 
     // remove the _stayAliveCallback so that the port can be collected by garbage collector
     _port.clear = function() {
