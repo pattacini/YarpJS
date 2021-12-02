@@ -4,11 +4,11 @@
   "author": "Carlo Ciliberto <cciliber@gmail.com>",
   "description": "JS bindings for YARP",
   "dependencies": {
-    "cmake-js": "3.2.1",
+    "cmake-js": "latest",
     "express": "latest",
     "jquery": "latest",
     "nan": "latest",
-    "socket.io": "1.5.1",
+    "socket.io": "latest",
     "socket.io-stream": "latest",
     "three": ">=0.125.0"
   },
@@ -21,7 +21,7 @@
     "url": "https://github.com/cciliber/YarpJS"
   },
   "devDependencies": {
-  "jquery": ">=3.5.0"
+    "jquery": ">=3.5.0"
   },
   "main": "yarp.js"
 }
