@@ -14,21 +14,72 @@ YarpJS is the object from which most other yarpjs objects inherit basic properti
 #include <string>
 
 
-// Two macros that implement NAN boilerplate code for creating 
-// - YARPJS_BASE: a new object from scratch
-// - YARPJS_INIT: a new object inheriting from a parent 
-// See at the bottom of the listing for a (commented) readable implementation of the macro
+/*
 
-#define YARPJS_BASE(_AAA,_js_name)         static Nan::Persistent<v8::FunctionTemplate>            constructor;  static NAN_MODULE_INIT(Init) {                                  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);                                                                      tpl->SetClassName(Nan::New(_js_name).ToLocalChecked());                                                                                         tpl->InstanceTemplate()->SetInternalFieldCount(1);                                                                                              setJSMethods(tpl);                                   constructor.Reset(tpl);                                    Nan::Set(target, Nan::New(_js_name).ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());                                  }        static NAN_METHOD(New) {                                  if (info.IsConstructCall()) {                                     _AAA* obj = new _AAA(info);                                     obj->Wrap(info.This());                                     info.GetReturnValue().Set(info.This());                                   } else {                                     const int argc = 1;                                     v8::Local<v8::Value> argv[argc] = {info[0]};                                     v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();                                     info.GetReturnValue().Set(cons->NewInstance(argc, argv));                                   }                                  } 
-#define YARPJS_INIT(_AAA,_js_name,_AAA_Parent)      static Nan::Persistent<v8::FunctionTemplate>            constructor;    static NAN_MODULE_INIT(Init) {                                  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);     v8::Local<v8::FunctionTemplate> cons = Nan::New(_AAA_Parent::constructor);  tpl->Inherit(cons);                                                                  tpl->SetClassName(Nan::New(_js_name).ToLocalChecked());                                                                                         tpl->InstanceTemplate()->SetInternalFieldCount(1);                                                                                              setJSMethods(tpl);                                   constructor.Reset(tpl);                                    Nan::Set(target, Nan::New(_js_name).ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());                                  }        static NAN_METHOD(New) {                                  if (info.IsConstructCall()) {                                     _AAA* obj = new _AAA(info);                                     obj->Wrap(info.This());                                     info.GetReturnValue().Set(info.This());                                   } else {                                     const int argc = 1;                                     v8::Local<v8::Value> argv[argc] = {info[0]};                                     v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();                                     info.GetReturnValue().Set(cons->NewInstance(argc, argv));                                   }                                  } 
+    Two macros that implement NAN boilerplate code for creating
+    - YARPJS_BASE: a new object from scratch
+    - YARPJS_INIT: a new object inheriting from a parent
+
+    These two macros are used to instantiate new yarpjs object in a way that NAN recognizes.
+    In particular...
+    - YARPJS_BASE: the new JS object is created with prototype the standard JS Object object.
+    - YARPJS_INIT(_AAA,_js_name,_AAA_Parent): the new JS object is created with prototype the YARPJS _AAA_Parent.
+
+*/
+#define YARPJS_BASE(_AAA,_js_name)                                                                 \
+static Nan::Persistent<v8::FunctionTemplate> constructor;                                          \
+static NAN_MODULE_INIT(Init) {                                                                     \
+  v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);                       \
+  tpl->SetClassName(Nan::New(_js_name).ToLocalChecked());                                          \
+  tpl->InstanceTemplate()->SetInternalFieldCount(1);                                               \
+  setJSMethods(tpl);                                                                               \
+  constructor.Reset(tpl);                                                                          \
+  Nan::Set(target, Nan::New(_js_name).ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());   \
+}                                                                                                  \
+static NAN_METHOD(New) {                                                                           \
+  if (info.IsConstructCall()) {                                                                    \
+    _AAA* obj = new _AAA(info);                                                                    \
+    obj->Wrap(info.This());                                                                        \
+    info.GetReturnValue().Set(info.This());                                                        \
+  } else {                                                                                         \
+    const int argc = 1;                                                                            \
+    v8::Local<v8::Value> argv[argc] = {info[0]};                                                   \
+    v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();       \
+    info.GetReturnValue().Set(cons->NewInstance(argc, argv));                                      \
+  }                                                                                                \
+}
+
+#define YARPJS_INIT(_AAA,_js_name,_AAA_Parent)                                                       \
+static Nan::Persistent<v8::FunctionTemplate> constructor;                                            \
+static NAN_MODULE_INIT(Init) {                                                                       \
+    v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);                       \
+    v8::Local<v8::FunctionTemplate> cons = Nan::New(_AAA_Parent::constructor);                       \
+    tpl->Inherit(cons);                                                                              \
+    tpl->SetClassName(Nan::New(_js_name).ToLocalChecked());                                          \
+    tpl->InstanceTemplate()->SetInternalFieldCount(1);                                               \
+    setJSMethods(tpl);                                                                               \
+    constructor.Reset(tpl);                                                                          \
+    Nan::Set(target, Nan::New(_js_name).ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());   \
+}                                                                                                    \
+static NAN_METHOD(New) {                                                                             \
+    if (info.IsConstructCall()) {                                                                    \
+        _AAA* obj = new _AAA(info);                                                                  \
+        obj->Wrap(info.This());                                                                      \
+        info.GetReturnValue().Set(info.This());                                                      \
+    } else {                                                                                         \
+        const int argc = 1;                                                                          \
+        v8::Local<v8::Value> argv[argc] = {info[0]};                                                 \
+        v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();     \
+        info.GetReturnValue().Set(cons->NewInstance(argc, argv));                                    \
+    }                                                                                                \
+}
 
 
-      
 
 
 class YarpJS : public Nan::ObjectWrap {
 private:
-    
+
 
     // Function in charge of registering the node.js methods (exposed to the user).
     // Called when creating the object.
@@ -61,81 +112,3 @@ public:
 
 
 #endif
-
-/* Description of the macros YARPJS_BASE and YARPJS_INIT.
-
-    These two macros are used to instantiate new yarpjs object in a way that NAN recognizes. 
-
-    In particular: 
-
-    - YARPJS_BASE:
-        the new JS object is created with prototype the standard JS Object object. 
-    
-    - YARPJS_INIT(_AAA,_js_name,_AAA_Parent)      
-        the new JS object is created with prototype the YARPJS _AAA_Parent.
-
-
-    Below we report the macros in (human reaadable) indented form.
-*/
-
-
-/*
-#define YARPJS_BASE(_AAA,_js_name)         
-
-static Nan::Persistent<v8::FunctionTemplate>            constructor;
-static NAN_MODULE_INIT(Init) {                                  
-    v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);
-    tpl->SetClassName(Nan::New(_js_name).ToLocalChecked());
-    tpl->InstanceTemplate()->SetInternalFieldCount(1);
-    setJSMethods(tpl);
-    constructor.Reset(tpl);
-    Nan::Set(target, Nan::New(_js_name).ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
-}
-
-static NAN_METHOD(New) {
-    if (info.IsConstructCall()) {
-        _AAA* obj = new _AAA(info);
-        obj->Wrap(info.This());
-        info.GetReturnValue().Set(info.This());
-    } else {                                     
-        const int argc = 1;                                     
-        v8::Local<v8::Value> argv[argc] = {info[0]};                                     
-        v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();
-        info.GetReturnValue().Set(cons->NewInstance(argc, argv));
-    }
-} 
-*/
-
-
-/*
-#define YARPJS_INIT(_AAA,_js_name,_AAA_Parent)      
-
-static Nan::Persistent<v8::FunctionTemplate>            constructor;    
-static NAN_MODULE_INIT(Init) {                                  
-    v8::Local<v8::FunctionTemplate> tpl = Nan::New<v8::FunctionTemplate>(New);     
-    v8::Local<v8::FunctionTemplate> cons = Nan::New(_AAA_Parent::constructor);  
-    tpl->Inherit(cons);                                                                  
-    tpl->SetClassName(Nan::New(_js_name).ToLocalChecked());
-    tpl->InstanceTemplate()->SetInternalFieldCount(1);
-    setJSMethods(tpl);                                   
-    constructor.Reset(tpl);                                    
-    Nan::Set(target, Nan::New(_js_name).ToLocalChecked(), Nan::GetFunction(tpl).ToLocalChecked());
-}
-
-static NAN_METHOD(New) {                                  
-    if (info.IsConstructCall()) {                                     
-        _AAA* obj = new _AAA(info);                                     
-        obj->Wrap(info.This());                                     
-        info.GetReturnValue().Set(info.This());                                   
-    } else {
-        const int argc = 1;                                     
-        v8::Local<v8::Value> argv[argc] = {info[0]};                                     
-        v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();
-        info.GetReturnValue().Set(cons->NewInstance(argc, argv));
-    }
-} 
-
-
-*/
-
-
