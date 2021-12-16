@@ -61,7 +61,7 @@ NAN_METHOD(YarpJS_RPCPort::Write) {
 
   // get the reply bottle
   // YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject());
-  YarpJS_Wrapper<yarp::os::Portable>* target = Nan::ObjectWrap::Unwrap< YarpJS_Wrapper<yarp::os::Portable> >(info[0]->ToObject());
+  YarpJS_Wrapper<yarp::os::Portable>* target = Nan::ObjectWrap::Unwrap< YarpJS_Wrapper<yarp::os::Portable> >(info[0]->ToObject(Nan::GetCurrentContext()));
 
   obj->write( *(target->getYarpObj()) );
 
@@ -89,7 +89,7 @@ NAN_METHOD(YarpJS_RPCPort::WriteWithReply) {
 
   // get the reply bottle
   // YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject());
-  YarpJS_Wrapper<yarp::os::Bottle>* target = Nan::ObjectWrap::Unwrap< YarpJS_Wrapper<yarp::os::Bottle> >(info[0]->ToObject());
+  YarpJS_Wrapper<yarp::os::Bottle>* target = Nan::ObjectWrap::Unwrap< YarpJS_Wrapper<yarp::os::Bottle> >(info[0]->ToObject(Nan::GetCurrentContext()));
 
   // obj->write( *(target->getYarpObj()) , obj->onReadReplier2 );
   yarp::os::Bottle b;
@@ -109,19 +109,8 @@ NAN_METHOD(YarpJS_RPCPort::Reply) {
   YarpJS_RPCPort* obj = Nan::ObjectWrap::Unwrap<YarpJS_RPCPort>(info.This());
 
   // get the reply bottle
-  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject());
+  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject(Nan::GetCurrentContext()));
 
   obj->onReadReplier.reply( *(target->getYarpObj()) );
 
 }
-
-
-
-
-
-
-
-
-
-
-

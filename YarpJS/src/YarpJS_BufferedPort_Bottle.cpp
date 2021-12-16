@@ -111,7 +111,7 @@ NAN_METHOD(YarpJS_BufferedPort_Bottle::Reply) {
   YarpJS_BufferedPort_Bottle* obj = Nan::ObjectWrap::Unwrap<YarpJS_BufferedPort_Bottle>(info.This());
 
   // get the reply bottle
-  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject());
+  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject(Nan::GetCurrentContext()));
 
   obj->RPCReplier.reply(*(target->getYarpObj()));
 

@@ -30,7 +30,7 @@ NAN_METHOD(YarpJS_Sound::Copy) {
 
   YarpJS_Sound* obj = Nan::ObjectWrap::Unwrap<YarpJS_Sound>(info.This());
 
-  YarpJS_Sound* target = Nan::ObjectWrap::Unwrap<YarpJS_Sound>(info[0]->ToObject());
+  YarpJS_Sound* target = Nan::ObjectWrap::Unwrap<YarpJS_Sound>(info[0]->ToObject(Nan::GetCurrentContext()));
   *obj->getYarpObj() = (*(target->getYarpObj()));
 
 }
@@ -54,7 +54,7 @@ NAN_METHOD(YarpJS_Sound::FromBinary) {
 
   YarpJS_Sound* obj = Nan::ObjectWrap::Unwrap<YarpJS_Sound>(info.This());
 
-  Local<Object> bufferObj = info[0]->ToObject();
+  Local<Object> bufferObj = info[0]->ToObject(Nan::GetCurrentContext());
 
   yarp::os::NetInt16 *data = (yarp::os::NetInt16*) node::Buffer::Data(bufferObj);
 
