@@ -43,8 +43,7 @@ static NAN_METHOD(New) {                                                        
         const int argc = 1;                                                                          \
         v8::Local<v8::Value> argv[argc] = {info[0]};                                                 \
         v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();     \
-        info.GetReturnValue().Set(cons->NewInstance(Nan::GetCurrentContext(), argc, argv).FromMaybe( \
-        v8::Local<v8::Object>::Cast(argv[0])));                                   \
+        info.GetReturnValue().Set(cons->NewInstance(Nan::GetCurrentContext(), argc, argv).ToLocalChecked()); \
     }                                                                                                \
 }
 
@@ -69,8 +68,7 @@ static NAN_METHOD(New) {                                                        
         const int argc = 1;                                                                          \
         v8::Local<v8::Value> argv[argc] = {info[0]};                                                 \
         v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(constructor)).ToLocalChecked();     \
-        info.GetReturnValue().Set(cons->NewInstance(Nan::GetCurrentContext(), argc, argv).FromMaybe( \
-        v8::Local<v8::Object>::Cast(argv[0])));                                   \
+        info.GetReturnValue().Set(cons->NewInstance(Nan::GetCurrentContext(), argc, argv).ToLocalChecked()); \
     }                                                                                                \
 }
 
