@@ -40,7 +40,7 @@ NAN_METHOD(YarpJS_Bottle::Copy) {
 
   YarpJS_Bottle* obj = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info.This());
   
-  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject(Nan::GetCurrentContext()));
+  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   obj->getYarpObj()->copy(*(target->getYarpObj()));
 
 }
