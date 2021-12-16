@@ -68,7 +68,7 @@ class _YarpJS_PortReplier : public yarp::os::PortReader {
         const int argc = 1;
         v8::Local<v8::Value> argv[argc] = {Nan::New<v8::String>(this->datum.toString()).ToLocalChecked()};
         v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Bottle::constructor)).ToLocalChecked();
-        tmp_arguments.push_back(cons->NewInstance(argc,argv));
+        tmp_arguments.push_back(cons->NewInstance(Nan::GetCurrentContext(), argc, argv).FromMaybe(argv[0]));
     }
 
 
@@ -137,7 +137,7 @@ class _YarpJS_PortWriteReplier {
         const int argc = 1;   
         v8::Local<v8::Value> argv[argc] = {Nan::New<v8::String>(this->reply_datum.toString()).ToLocalChecked()};
         v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Bottle::constructor)).ToLocalChecked();
-        tmp_arguments.push_back(cons->NewInstance(argc,argv));
+        tmp_arguments.push_back(cons->NewInstance(Nan::GetCurrentContext(), argc, argv).FromMaybe(argv[0]));
     }
 
     virtual void _internal_Write();
@@ -258,5 +258,3 @@ public:
 
 
 #endif
-
-
