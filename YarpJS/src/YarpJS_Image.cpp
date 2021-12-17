@@ -60,7 +60,7 @@ NAN_METHOD(YarpJS_Image::ToBinary) {
 
   YarpJS_Image* obj = Nan::ObjectWrap::Unwrap<YarpJS_Image>(info.This());
 
-  int compression_quality = info[0]->IntegerValue();
+  int compression_quality = info[0]->IntegerValue(Nan::GetCurrentContext()).FromMaybe(0);
 
   if(info[0]->IsUndefined())
     obj->compress();

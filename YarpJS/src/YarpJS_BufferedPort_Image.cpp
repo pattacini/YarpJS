@@ -59,7 +59,7 @@ NAN_METHOD(YarpJS_BufferedPort_Image::Open) {
   YarpJS_BufferedPort_Image* obj = Nan::ObjectWrap::Unwrap<YarpJS_BufferedPort_Image>(info.This());
   
   // std::string _port_name = info[0]->IsUndefined() ? "" : Nan::To<std::string>(info[0]).FromJust();
-  v8::String::Utf8Value _port_name(info[0]->ToString());
+  v8::String::Utf8Value _port_name(v8::Isolate::GetCurrent(),info[0]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
 
 
   bool isOpen = obj->open(*_port_name);

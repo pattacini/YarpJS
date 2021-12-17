@@ -51,7 +51,7 @@ public:
     // Create the Bottle from a string (using the yarp implementation)
     void fromString(const Nan::FunctionCallbackInfo<v8::Value> &info)
     {
-        v8::String::Utf8Value _bottle_string(info[0]->ToString());
+        v8::String::Utf8Value _bottle_string(v8::Isolate::GetCurrent(), info[0]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
         this->getYarpObj()->fromString(*_bottle_string);
     }
 
@@ -99,5 +99,3 @@ public:
 
 
 #endif
-
-

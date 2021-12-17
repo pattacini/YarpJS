@@ -29,8 +29,8 @@ void YarpJS_Bottle::toArray(const yarp::os::Bottle *bObj, v8::Local<v8::Array> &
       }
       else if(bObj->get(i).isString())
         Nan::Set(bArr, i, Nan::New(bObj->get(i).toString().c_str()).ToLocalChecked() );
-      else if(bObj->get(i).isDouble() || bObj->get(i).isInt())
-        Nan::Set(bArr, i, Nan::New(bObj->get(i).asDouble()) );
+      else if(bObj->get(i).isFloat64() || bObj->get(i).isInt32())
+        Nan::Set(bArr, i, Nan::New(bObj->get(i).asFloat64()) );
 
 }
 

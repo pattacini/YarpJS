@@ -28,7 +28,7 @@ class _YarpJS_PortReplier : public yarp::os::PortReader {
     yarp::os::Bottle                                datum;
     yarp::os::Bottle                                reply_datum;
 
-    yarp::os::Mutex                                 mutex_reply;
+    std::mutex                                      mutex_reply;
 
     bool                                            isClosing;
 
@@ -90,7 +90,7 @@ public:
     void reply(yarp::os::Bottle &_reply_datum)
     {
         // if we are waiting for a reply 
-        if(!mutex_reply.tryLock())
+        if(!mutex_reply.try_lock())
             reply_datum.copy(_reply_datum);
 
         mutex_reply.unlock();
