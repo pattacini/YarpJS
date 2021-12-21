@@ -48,7 +48,7 @@ NAN_METHOD(YarpJS_Image::Copy) {
 
   YarpJS_Image* obj = Nan::ObjectWrap::Unwrap<YarpJS_Image>(info.This());
 
-  YarpJS_Image* target = Nan::ObjectWrap::Unwrap<YarpJS_Image>(info[0]->ToObject());
+  YarpJS_Image* target = Nan::ObjectWrap::Unwrap<YarpJS_Image>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   obj->getYarpObj()->copy(*(target->getYarpObj()));
 
   obj->isCompressed = false;
@@ -60,7 +60,7 @@ NAN_METHOD(YarpJS_Image::ToBinary) {
 
   YarpJS_Image* obj = Nan::ObjectWrap::Unwrap<YarpJS_Image>(info.This());
 
-  int compression_quality = info[0]->IntegerValue();
+  int compression_quality = info[0]->IntegerValue(Nan::GetCurrentContext()).FromMaybe(0);
 
   if(info[0]->IsUndefined())
     obj->compress();

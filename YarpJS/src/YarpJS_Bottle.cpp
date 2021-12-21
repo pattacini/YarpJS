@@ -29,8 +29,8 @@ void YarpJS_Bottle::toArray(const yarp::os::Bottle *bObj, v8::Local<v8::Array> &
       }
       else if(bObj->get(i).isString())
         Nan::Set(bArr, i, Nan::New(bObj->get(i).toString().c_str()).ToLocalChecked() );
-      else if(bObj->get(i).isDouble() || bObj->get(i).isInt())
-        Nan::Set(bArr, i, Nan::New(bObj->get(i).asDouble()) );
+      else if(bObj->get(i).isFloat64() || bObj->get(i).isInt32())
+        Nan::Set(bArr, i, Nan::New(bObj->get(i).asFloat64()) );
 
 }
 
@@ -40,7 +40,7 @@ NAN_METHOD(YarpJS_Bottle::Copy) {
 
   YarpJS_Bottle* obj = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info.This());
   
-  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject());
+  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
   obj->getYarpObj()->copy(*(target->getYarpObj()));
 
 }
@@ -88,14 +88,3 @@ NAN_METHOD(YarpJS_Bottle::GetObjType) {
 
   info.GetReturnValue().Set(Nan::New("bottle").ToLocalChecked());
 }
-
-
-
-
-
-
-
-
-
-
-

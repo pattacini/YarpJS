@@ -22,7 +22,7 @@ void YarpJS_BufferedPort_Image::_callback_onRead(std::vector<v8::Local<v8::Value
     // create a new YarpJS_Image
     v8::Local<v8::Value> argv[1] = {Nan::New(Nan::Null)};
     v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Image::constructor)).ToLocalChecked();
-    v8::Local<v8::Object> tmpImgJS = cons->NewInstance(1,argv);
+    v8::Local<v8::Object> tmpImgJS = cons->NewInstance(Nan::GetCurrentContext(), 1, argv).ToLocalChecked();
 
     YarpJS_Image *tmpImg = Nan::ObjectWrap::Unwrap<YarpJS_Image>(tmpImgJS);
     
@@ -41,7 +41,7 @@ NAN_METHOD(YarpJS_BufferedPort_Image::Prepare) {
   // create a new YarpJS_Image
   v8::Local<v8::Value> argv[1] = {Nan::New(Nan::Null)};
   v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Image::constructor)).ToLocalChecked();
-  v8::Local<v8::Object> bPreparedJS = cons->NewInstance(1,argv);
+  v8::Local<v8::Object> bPreparedJS = cons->NewInstance(Nan::GetCurrentContext(), 1, argv).ToLocalChecked();
 
   YarpJS_Image *bPrepared = Nan::ObjectWrap::Unwrap<YarpJS_Image>(bPreparedJS);
   
@@ -59,7 +59,7 @@ NAN_METHOD(YarpJS_BufferedPort_Image::Open) {
   YarpJS_BufferedPort_Image* obj = Nan::ObjectWrap::Unwrap<YarpJS_BufferedPort_Image>(info.This());
   
   // std::string _port_name = info[0]->IsUndefined() ? "" : Nan::To<std::string>(info[0]).FromJust();
-  v8::String::Utf8Value _port_name(info[0]->ToString());
+  v8::String::Utf8Value _port_name(v8::Isolate::GetCurrent(),info[0]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
 
 
   bool isOpen = obj->open(*_port_name);
@@ -118,6 +118,3 @@ NAN_METHOD(YarpJS_BufferedPort_Image::Write) {
 //   obj->RPCReplier.reply(*(target->getYarpObj()));
 
 // }
-
-
-

@@ -21,7 +21,7 @@ NAN_METHOD(YarpJS_RPCPort::Open) {
   YarpJS_RPCPort* obj = Nan::ObjectWrap::Unwrap<YarpJS_RPCPort>(info.This());
   
   // std::string _port_name = info[0]->IsUndefined() ? "" : Nan::To<std::string>(info[0]).FromJust();
-  v8::String::Utf8Value _port_name(info[0]->ToString());
+  v8::String::Utf8Value _port_name(v8::Isolate::GetCurrent(),info[0]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
 
 
   bool isOpen = obj->open(*_port_name);
@@ -61,7 +61,8 @@ NAN_METHOD(YarpJS_RPCPort::Write) {
 
   // get the reply bottle
   // YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject());
-  YarpJS_Wrapper<yarp::os::Portable>* target = Nan::ObjectWrap::Unwrap< YarpJS_Wrapper<yarp::os::Portable> >(info[0]->ToObject());
+  YarpJS_Wrapper<yarp::os::Portable>* target = Nan::ObjectWrap::Unwrap< YarpJS_Wrapper<yarp::os::Portable> >
+  (info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
 
   obj->write( *(target->getYarpObj()) );
 
@@ -89,7 +90,8 @@ NAN_METHOD(YarpJS_RPCPort::WriteWithReply) {
 
   // get the reply bottle
   // YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject());
-  YarpJS_Wrapper<yarp::os::Bottle>* target = Nan::ObjectWrap::Unwrap< YarpJS_Wrapper<yarp::os::Bottle> >(info[0]->ToObject());
+  YarpJS_Wrapper<yarp::os::Bottle>* target = Nan::ObjectWrap::Unwrap< YarpJS_Wrapper<yarp::os::Bottle> >
+  (info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
 
   // obj->write( *(target->getYarpObj()) , obj->onReadReplier2 );
   yarp::os::Bottle b;
@@ -109,19 +111,8 @@ NAN_METHOD(YarpJS_RPCPort::Reply) {
   YarpJS_RPCPort* obj = Nan::ObjectWrap::Unwrap<YarpJS_RPCPort>(info.This());
 
   // get the reply bottle
-  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject());
+  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
 
   obj->onReadReplier.reply( *(target->getYarpObj()) );
 
 }
-
-
-
-
-
-
-
-
-
-
-

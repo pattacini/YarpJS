@@ -46,8 +46,8 @@ NAN_METHOD(YarpJS_Network::Connect) {
 
   YarpJS_Network* obj = Nan::ObjectWrap::Unwrap<YarpJS_Network>(info.This());
 
-  v8::String::Utf8Value param1(info[0]->ToString());
-  v8::String::Utf8Value param2(info[1]->ToString());
+  v8::String::Utf8Value param1(v8::Isolate::GetCurrent(),info[0]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
+  v8::String::Utf8Value param2(v8::Isolate::GetCurrent(),info[1]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
 
   // convert it to string
   std::string _src = std::string(*param1);    
@@ -67,8 +67,8 @@ NAN_METHOD(YarpJS_Network::Disconnect) {
 
   YarpJS_Network* obj = Nan::ObjectWrap::Unwrap<YarpJS_Network>(info.This());
 
-  v8::String::Utf8Value param1(info[0]->ToString());
-  v8::String::Utf8Value param2(info[1]->ToString());
+  v8::String::Utf8Value param1(v8::Isolate::GetCurrent(),info[0]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
+  v8::String::Utf8Value param2(v8::Isolate::GetCurrent(),info[1]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
 
   // convert it to string
   std::string _src = std::string(*param1);    
@@ -110,16 +110,3 @@ NAN_METHOD(YarpJS_Network::List) {
 
   info.GetReturnValue().Set(bArr);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

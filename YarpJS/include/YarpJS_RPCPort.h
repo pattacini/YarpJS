@@ -28,7 +28,7 @@ class _YarpJS_PortReplier : public yarp::os::PortReader {
     yarp::os::Bottle                                datum;
     yarp::os::Bottle                                reply_datum;
 
-    yarp::os::Mutex                                 mutex_reply;
+    std::mutex                                      mutex_reply;
 
     bool                                            isClosing;
 
@@ -68,7 +68,7 @@ class _YarpJS_PortReplier : public yarp::os::PortReader {
         const int argc = 1;
         v8::Local<v8::Value> argv[argc] = {Nan::New<v8::String>(this->datum.toString()).ToLocalChecked()};
         v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Bottle::constructor)).ToLocalChecked();
-        tmp_arguments.push_back(cons->NewInstance(argc,argv));
+        tmp_arguments.push_back(cons->NewInstance(Nan::GetCurrentContext(), argc, argv).ToLocalChecked());
     }
 
 
@@ -90,7 +90,7 @@ public:
     void reply(yarp::os::Bottle &_reply_datum)
     {
         // if we are waiting for a reply 
-        if(!mutex_reply.tryLock())
+        if(!mutex_reply.try_lock())
             reply_datum.copy(_reply_datum);
 
         mutex_reply.unlock();
@@ -137,7 +137,7 @@ class _YarpJS_PortWriteReplier {
         const int argc = 1;   
         v8::Local<v8::Value> argv[argc] = {Nan::New<v8::String>(this->reply_datum.toString()).ToLocalChecked()};
         v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Bottle::constructor)).ToLocalChecked();
-        tmp_arguments.push_back(cons->NewInstance(argc,argv));
+        tmp_arguments.push_back(cons->NewInstance(Nan::GetCurrentContext(), argc, argv).ToLocalChecked());
     }
 
     virtual void _internal_Write();
@@ -258,5 +258,3 @@ public:
 
 
 #endif
-
-

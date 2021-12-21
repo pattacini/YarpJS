@@ -22,7 +22,7 @@ void YarpJS_BufferedPort_Sound::_callback_onRead(std::vector<v8::Local<v8::Value
     // create a new YarpJS_Sound
     v8::Local<v8::Value> argv[1] = {Nan::New(Nan::Null)};
     v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Sound::constructor)).ToLocalChecked();
-    v8::Local<v8::Object> tmpImgJS = cons->NewInstance(1,argv);
+    v8::Local<v8::Object> tmpImgJS = cons->NewInstance(Nan::GetCurrentContext(), 1, argv).ToLocalChecked();
 
     YarpJS_Sound *tmpImg = Nan::ObjectWrap::Unwrap<YarpJS_Sound>(tmpImgJS);
     
@@ -43,7 +43,7 @@ NAN_METHOD(YarpJS_BufferedPort_Sound::Prepare) {
   // create a new YarpJS_Sound
   v8::Local<v8::Value> argv[1] = {Nan::New(Nan::Null)};
   v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Sound::constructor)).ToLocalChecked();
-  v8::Local<v8::Object> bPreparedJS = cons->NewInstance(1,argv);
+  v8::Local<v8::Object> bPreparedJS = cons->NewInstance(Nan::GetCurrentContext(), 1, argv).ToLocalChecked();
 
   YarpJS_Sound *bPrepared = Nan::ObjectWrap::Unwrap<YarpJS_Sound>(bPreparedJS);
   
@@ -62,7 +62,7 @@ NAN_METHOD(YarpJS_BufferedPort_Sound::Open) {
   YarpJS_BufferedPort_Sound* obj = Nan::ObjectWrap::Unwrap<YarpJS_BufferedPort_Sound>(info.This());
   
   // std::string _port_name = info[0]->IsUndefined() ? "" : Nan::To<std::string>(info[0]).FromJust();
-  v8::String::Utf8Value _port_name(info[0]->ToString());
+  v8::String::Utf8Value _port_name(v8::Isolate::GetCurrent(),info[0]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
 
 
   bool isOpen = obj->open(*_port_name);
@@ -142,5 +142,3 @@ NAN_METHOD(YarpJS_BufferedPort_Sound::WaitForWrite) {
 //   obj->RPCReplier.reply(*(target->getYarpObj()));
 
 // }
-
-

@@ -26,7 +26,7 @@ void YarpJS_BufferedPort_Bottle::_callback_onRead(std::vector<v8::Local<v8::Valu
     const int argc = 1;   
     v8::Local<v8::Value> argv[argc] = {Nan::New<String>(this->datum.toString()).ToLocalChecked()};
     v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Bottle::constructor)).ToLocalChecked();
-    tmp_arguments.push_back(cons->NewInstance(argc,argv));
+    tmp_arguments.push_back(cons->NewInstance(Nan::GetCurrentContext(), argc, argv).ToLocalChecked());
 }
 
 
@@ -37,7 +37,7 @@ NAN_METHOD(YarpJS_BufferedPort_Bottle::Open) {
   YarpJS_BufferedPort_Bottle* obj = Nan::ObjectWrap::Unwrap<YarpJS_BufferedPort_Bottle>(info.This());
   
   // std::string _port_name = info[0]->IsUndefined() ? "" : Nan::To<std::string>(info[0]).FromJust();
-  v8::String::Utf8Value _port_name(info[0]->ToString());
+  v8::String::Utf8Value _port_name(v8::Isolate::GetCurrent(),info[0]->ToString(Nan::GetCurrentContext()).ToLocalChecked());
 
 
   bool isOpen = obj->open(*_port_name);
@@ -92,7 +92,7 @@ NAN_METHOD(YarpJS_BufferedPort_Bottle::Prepare) {
   // create a new YarpJS_Bottle
   v8::Local<v8::Value> argv[1] = {Nan::New(Nan::Null)};
   v8::Local<v8::Function> cons = Nan::GetFunction(Nan::New(YarpJS_Bottle::constructor)).ToLocalChecked();
-  v8::Local<v8::Object> bPreparedJS = cons->NewInstance(1,argv);
+  v8::Local<v8::Object> bPreparedJS = cons->NewInstance(Nan::GetCurrentContext(), 1, argv).ToLocalChecked();
 
   YarpJS_Bottle *bPrepared = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(bPreparedJS);
   
@@ -111,16 +111,8 @@ NAN_METHOD(YarpJS_BufferedPort_Bottle::Reply) {
   YarpJS_BufferedPort_Bottle* obj = Nan::ObjectWrap::Unwrap<YarpJS_BufferedPort_Bottle>(info.This());
 
   // get the reply bottle
-  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject());
+  YarpJS_Bottle* target = Nan::ObjectWrap::Unwrap<YarpJS_Bottle>(info[0]->ToObject(Nan::GetCurrentContext()).ToLocalChecked());
 
   obj->RPCReplier.reply(*(target->getYarpObj()));
 
 }
-
-
-
-
-
-
-
-

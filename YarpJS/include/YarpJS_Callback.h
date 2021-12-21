@@ -41,7 +41,7 @@ private:
     static void _internal_worker_end(uv_work_t *req, int status);
 
 
-    yarp::os::Mutex                                 mutex_callback;
+    std::mutex                                 mutex_callback;
 
     
 
@@ -163,5 +163,3 @@ void YarpJS_Callback<T>::setCallback(const Nan::FunctionCallbackInfo<v8::Value> 
 
 
 #endif
-
-

@@ -47,18 +47,26 @@ The library is based on node.js which can be natively integrated with external C
 
 **Server dependencies**: 
 * [YARP](https://github.com/robotology/yarp) (Duh!). With OpenCV!
-* [node.js](https://nodejs.org/en/). Version >= 4.2.2. Follow the [official guide](https://nodejs.org/en/download/package-manager/). 
+* [node.js](https://nodejs.org/en/). Version = 14.17.0. Follow the [official guide](https://nodejs.org/en/download/package-manager/).
+* Dependencies automatially handled by **Node.js** package manager (**npm)**:
+    - [cmake]() ≥ 6.3.0
+    - [express]()
+    - [jquery]()
+    - [nan]()
+    - [socket.io]() ≥ 4.4.0
+    - [socket.io-stream]()
+    - [three]() ≥ 0.125.0
 
 **Note**: 
-- **Please make sure** that your Node version is >= 4.2.2
+- **Please make sure** that your Node version is = 14.17.0. This repository hasn't been tested with newer Node versions. It is easier to handle Node.js versions through the Node version manager (NVM). Refer to [Reinstall npm with a node version manager](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally#reinstall-npm-with-a-node-version-manager) for further details.
 - **Linux**. If you installed Node.js from the package manager, it could happen that the command `node` is not in your path, but rather `nodejs` is. To this end, run `$> sudo ln -s /usr/bin/nodejs /usr/bin/node`.
 
 
 Once you have all dependencies installed, go to the folder where you have cloned this repository and run:
 ```
 $> sudo npm install
-$> ./node_modules/cmake-js/bin/cmake-js
 ```
+The npm install script defined in `./package.json` runs `./node_modules/cmake-js/bin/cmake-js` on its own.
 
 **Optional**: although the command `sudo npm install` installs the node dependencies *locally*, it needs administrative permissions. If you want to avoid this (and just use `npm install`), follow the [official npm guide](https://docs.npmjs.com/getting-started/fixing-npm-permissions). This is not required to use yarp.js though.
 

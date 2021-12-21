@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.12)
 
 project(YarpJS)
 
@@ -36,5 +36,3 @@ target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} ${OpenCV_LIBRARIES} ${YARP
 
 # install(TARGETS hello_yarp
 # 	RUNTIME DESTINATION 	${CMAKE_CURRENT_SOURCE_DIR}/../bin)
-
-
