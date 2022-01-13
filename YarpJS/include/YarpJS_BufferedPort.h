@@ -31,6 +31,8 @@ protected:
 
     virtual void onRead(T &_datum)
     {
+        onReadCallback->lockMutex();
+
         datum = _datum;
         
         onReadCallback->callCallback();
