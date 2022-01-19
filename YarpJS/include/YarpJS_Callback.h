@@ -47,8 +47,8 @@ private:
 
 public:
 
-    void lockMutex();
     void callCallback();
+    void callCallback(typename T::datumType &_datum);
 
     void setCallback(const Nan::FunctionCallbackInfo<v8::Value> &info);
     void setCallback(const v8::Value &info);
@@ -129,14 +129,23 @@ void YarpJS_Callback<T>::_internal_worker_end(uv_work_t *req, int status)
 
 
 template <class T>
-void YarpJS_Callback<T>::lockMutex()
+void YarpJS_Callback<T>::callCallback()
 {
     mutex_callback.lock();
+
+    if(callback!=NULL)
+        uv_async_send( &(this->async) );
+    else
+        mutex_callback.unlock();
 }
 
 template <class T>
-void YarpJS_Callback<T>::callCallback()
+void YarpJS_Callback<T>::callCallback(typename T::datumType &_datum)
 {
+    mutex_callback.lock();
+
+    parent->latchDatum(_datum);
+
     if(callback!=NULL)
         uv_async_send( &(this->async) );
     else

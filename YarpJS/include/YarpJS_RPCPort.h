@@ -73,6 +73,8 @@ class _YarpJS_PortReplier : public yarp::os::PortReader {
 
 
 public:
+    typedef yarp::os::Bottle datumType;
+
     _YarpJS_PortReplier()
     {
         isClosing = false;
@@ -143,6 +145,8 @@ class _YarpJS_PortWriteReplier {
     virtual void _internal_Write();
 
 public:
+    typedef yarp::os::Bottle datumType;
+
     _YarpJS_PortWriteReplier(YarpJS_RPCPort &_parent)
         :parent(_parent)
     {
