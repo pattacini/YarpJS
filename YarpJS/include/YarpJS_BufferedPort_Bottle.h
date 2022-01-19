@@ -66,6 +66,8 @@ class _YarpJS_RPCReplier : public yarp::os::PortReader {
 
 
 public:
+    typedef yarp::os::Bottle datumType;
+
     _YarpJS_RPCReplier()
     {
         mutex_reply.lock();

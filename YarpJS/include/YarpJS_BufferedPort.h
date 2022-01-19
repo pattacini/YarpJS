@@ -25,20 +25,26 @@ class YarpJS_BufferedPort : public YarpJS,
                             public yarp::os::BufferedPort<T>
 {
 protected:
-   T        datum;
 
-   YarpJS_Callback<YarpJS_BufferedPort<T> >         *onReadCallback;
+    T        datum;
+
+    YarpJS_Callback<YarpJS_BufferedPort<T> >         *onReadCallback;
 
     virtual void onRead(T &_datum)
     {
-        datum = _datum;
-        
-        onReadCallback->callCallback();
+        onReadCallback->callCallback(_datum);
     }
 
 public:
 
+    typedef T datumType;
+
     virtual void _callback_onRead(std::vector<v8::Local<v8::Value> > &tmp_arguments) = 0;
+
+    virtual void latchDatum(T &datumToLatch)
+    {
+        datum = datumToLatch;
+    }
 
     explicit YarpJS_BufferedPort()
     {     
