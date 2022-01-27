@@ -10,7 +10,7 @@
     "nan": "latest",
     "socket.io": "latest",
     "socket.io-stream": "latest",
-    "three": ">=0.125.0"
+    "three": ">=0.137.0"
   },
   "scripts": {
     "install": "cmake-js"
