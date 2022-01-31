@@ -13,7 +13,7 @@
     "three": ">=0.125.0"
   },
   "scripts": {
-    "install": "cmake-js"
+    "install": "cmake-js -D configure"
   },
   "license": "MIT",
   "repository": {
