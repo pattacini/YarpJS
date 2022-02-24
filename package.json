@@ -12,9 +12,6 @@
     "socket.io-stream": "latest",
     "three": ">=0.125.0"
   },
-  "scripts": {
-    "install": "cmake-js"
-  },
   "license": "MIT",
   "repository": {
     "type": "git",
