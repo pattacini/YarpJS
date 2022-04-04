@@ -34,8 +34,8 @@
         box-shadow: 4px 4px 10px -3px rgba(0, 0, 0, 0.5);
 
         display: block;
-        height: 240px;
-        width: 320px;
+        height: 480px;
+        width: 640px;
       }
 
       .invisible {
@@ -105,11 +105,14 @@
 
     <div class='main cont'>
 
-        <div id='write-time'></div>
         <div class='cont'>
           <!-- <img id='stream-video'/> -->
           <canvas id='stream-video'></canvas>
-
+        </div>
+        <br>
+        <div id='write-time'></div>
+        <br>
+        <div class='cont'>
           <form action = "" id='form-connect-stream-video' class="form-inline" style="margin-bottom: 1em">
 
             <input type="text" class="form-stream-video" id="input-connect-stream-video" placeholder="/robot/cam:o" value='/robot/cam:o'>
