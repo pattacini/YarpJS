@@ -174,7 +174,7 @@
       if(g_img != undefined)
       {
         virtual_img.src = yarp.getImageSrc(g_img.compression_type,g_img.buffer);
-        video_stream_element.getContext('2d').drawImage(virtual_img,0,0);
+        video_stream_element.getContext('2d').drawImage(virtual_img,0,0,video_stream_element.width,video_stream_element.height);
       }
 
       setTimeout(tmp_visual,33);
