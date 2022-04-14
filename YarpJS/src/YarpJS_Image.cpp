@@ -53,11 +53,10 @@ void YarpJS_Image::compress(int compression_quality)
     if (imgPixelCode != VOCAB_PIXEL_BGR
         && imgPixelCode != VOCAB_PIXEL_BGRA) {
         auto conversionCodePtr = yarpCode2colorConvCode.find(imgPixelCode);
-        if (conversionCodePtr != yarpCode2colorConvCode.end()) {
-            cv::cvtColor(internalImage, internalImage, conversionCodePtr->second, 0);
-        } else {
+        if (conversionCodePtr == yarpCode2colorConvCode.end()) {
             throw std::out_of_range("YarpJS_Image::compress(int compression_quality): pixel code not supported");
         }
+        cv::cvtColor(internalImage, internalImage, conversionCodePtr->second, 0);
     }
 
     cv::imencode(encodeString,internalImage, internalBuffer, p);
