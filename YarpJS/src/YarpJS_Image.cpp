@@ -18,9 +18,9 @@ void YarpJS_Image::compress(int compression_quality)
 {
   if(!this->isCompressed)
   {
-    yarp::sig::ImageOf<yarp::sig::PixelBgr> pixelTypedImage;
+    yarp::sig::ImageOf<yarp::sig::PixelBgra> pixelTypedImage;
     pixelTypedImage.copy(*this->getYarpObj());
-    internalImage = yarp::cv::toCvMat<yarp::sig::PixelBgr>(pixelTypedImage);
+    internalImage = yarp::cv::toCvMat<yarp::sig::PixelBgra>(pixelTypedImage);
     std::vector<int> p;
     std::string encodeString;
     if(compression_type == PNG)
