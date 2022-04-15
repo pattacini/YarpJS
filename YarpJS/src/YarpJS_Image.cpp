@@ -14,33 +14,13 @@ using namespace v8;
 
 Nan::Persistent<v8::FunctionTemplate>  YarpJS_Image::constructor;
 
-//typedef cv::Mat (*toCvMatFunc)(yarp::sig::ImageOf<yarp::sig::PixelRgb>&);
-template <typename T>
-using toCvMatFunc = cv::Mat (*)(yarp::sig::ImageOf<T>&);
-
 void YarpJS_Image::compress(int compression_quality)
 {
-  static std::map<int,toCvMatFunc<yarp::sig::PixelRgb>> yarpCode2toCvMat = {
-//      {VOCAB_PIXEL_MONO        , &yarp::cv::toCvMat<yarp::sig::PixelMono>},
-//      {VOCAB_PIXEL_MONO16      , &yarp::cv::toCvMat<yarp::sig::PixelMono16>},
-//      {VOCAB_PIXEL_MONO_SIGNED , &yarp::cv::toCvMat<yarp::sig::PixelMonoSigned>},
-//      {VOCAB_PIXEL_MONO_FLOAT  , &yarp::cv::toCvMat<yarp::sig::PixelFloat>},
-//      {VOCAB_PIXEL_INT         , &yarp::cv::toCvMat<yarp::sig::PixelInt>},
-//      {VOCAB_PIXEL_BGR         , &yarp::cv::toCvMat<yarp::sig::PixelBgr>},
-      {VOCAB_PIXEL_RGB         , &yarp::cv::toCvMat<yarp::sig::PixelRgb>},
-//      {VOCAB_PIXEL_RGB_SIGNED  , &yarp::cv::toCvMat<yarp::sig::PixelRgbSigned>},
-//      {VOCAB_PIXEL_RGB_FLOAT   , &yarp::cv::toCvMat<yarp::sig::PixelRgbFloat>},
-//      {VOCAB_PIXEL_RGB_INT     , &yarp::cv::toCvMat<yarp::sig::PixelRgbInt>},
-//      {VOCAB_PIXEL_HSV         , &yarp::cv::toCvMat<yarp::sig::PixelHsv>},
-//      {VOCAB_PIXEL_HSV_FLOAT   , &yarp::cv::toCvMat<yarp::sig::PixelHsvFloat>},
-//      {VOCAB_PIXEL_RGBA        , &yarp::cv::toCvMat<yarp::sig::PixelRgba>},
-//      {VOCAB_PIXEL_BGRA        , &yarp::cv::toCvMat<yarp::sig::PixelBgra>}
-  };
-
   if(!this->isCompressed)
   {
-    yarp::sig::ImageOf<yarp::sig::PixelRgb>* pixelTypedImage = static_cast<yarp::sig::ImageOf<yarp::sig::PixelRgb>*>(this->getYarpObj());
-    internalImage = yarpCode2toCvMat.at(this->getYarpObj()->getPixelCode())(*pixelTypedImage);
+    yarp::sig::ImageOf<yarp::sig::PixelBgr> pixelTypedImage;
+    pixelTypedImage.copy(*this->getYarpObj());
+    internalImage = yarp::cv::toCvMat<yarp::sig::PixelBgr>(pixelTypedImage);
     std::vector<int> p;
     std::string encodeString;
     if(compression_type == PNG)
