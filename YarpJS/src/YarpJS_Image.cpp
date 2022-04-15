@@ -14,26 +14,33 @@ using namespace v8;
 
 Nan::Persistent<v8::FunctionTemplate>  YarpJS_Image::constructor;
 
-
+//typedef cv::Mat (*toCvMatFunc)(yarp::sig::ImageOf<yarp::sig::PixelRgb>&);
+template <typename T>
+using toCvMatFunc = cv::Mat (*)(yarp::sig::ImageOf<T>&);
 
 void YarpJS_Image::compress(int compression_quality)
 {
-  static const std::map<int,int> yarpCode2colorConvCode {
-      {VOCAB_PIXEL_MONO,cv::COLOR_GRAY2BGR},
-      {VOCAB_PIXEL_RGB,cv::COLOR_RGB2BGR},
-      {VOCAB_PIXEL_RGBA,cv::COLOR_RGBA2BGRA},
-      {VOCAB_PIXEL_HSV,cv::COLOR_HSV2BGR_FULL},
-      {VOCAB_PIXEL_ENCODING_BAYER_GRBG8,cv::COLOR_BayerGR2BGR},
-      {VOCAB_PIXEL_ENCODING_BAYER_BGGR8,cv::COLOR_BayerBG2BGR},
-      {VOCAB_PIXEL_ENCODING_BAYER_GBRG8,cv::COLOR_BayerGB2BGR},
-      {VOCAB_PIXEL_ENCODING_BAYER_RGGB8,cv::COLOR_BayerRG2BGR},
-      {VOCAB_PIXEL_YUV_420,cv::COLOR_YUV2BGR_I420},
-      {VOCAB_PIXEL_YUV_422,cv::COLOR_YUV2BGR_Y422}
+  static std::map<int,toCvMatFunc<yarp::sig::PixelRgb>> yarpCode2toCvMat = {
+//      {VOCAB_PIXEL_MONO        , &yarp::cv::toCvMat<yarp::sig::PixelMono>},
+//      {VOCAB_PIXEL_MONO16      , &yarp::cv::toCvMat<yarp::sig::PixelMono16>},
+//      {VOCAB_PIXEL_MONO_SIGNED , &yarp::cv::toCvMat<yarp::sig::PixelMonoSigned>},
+//      {VOCAB_PIXEL_MONO_FLOAT  , &yarp::cv::toCvMat<yarp::sig::PixelFloat>},
+//      {VOCAB_PIXEL_INT         , &yarp::cv::toCvMat<yarp::sig::PixelInt>},
+//      {VOCAB_PIXEL_BGR         , &yarp::cv::toCvMat<yarp::sig::PixelBgr>},
+      {VOCAB_PIXEL_RGB         , &yarp::cv::toCvMat<yarp::sig::PixelRgb>},
+//      {VOCAB_PIXEL_RGB_SIGNED  , &yarp::cv::toCvMat<yarp::sig::PixelRgbSigned>},
+//      {VOCAB_PIXEL_RGB_FLOAT   , &yarp::cv::toCvMat<yarp::sig::PixelRgbFloat>},
+//      {VOCAB_PIXEL_RGB_INT     , &yarp::cv::toCvMat<yarp::sig::PixelRgbInt>},
+//      {VOCAB_PIXEL_HSV         , &yarp::cv::toCvMat<yarp::sig::PixelHsv>},
+//      {VOCAB_PIXEL_HSV_FLOAT   , &yarp::cv::toCvMat<yarp::sig::PixelHsvFloat>},
+//      {VOCAB_PIXEL_RGBA        , &yarp::cv::toCvMat<yarp::sig::PixelRgba>},
+//      {VOCAB_PIXEL_BGRA        , &yarp::cv::toCvMat<yarp::sig::PixelBgra>}
   };
 
   if(!this->isCompressed)
   {
-    internalImage = cv::cvarrToMat((IplImage *) this->getYarpObj()->getIplImage());
+    yarp::sig::ImageOf<yarp::sig::PixelRgb>* pixelTypedImage = static_cast<yarp::sig::ImageOf<yarp::sig::PixelRgb>*>(this->getYarpObj());
+    internalImage = yarpCode2toCvMat.at(this->getYarpObj()->getPixelCode())(*pixelTypedImage);
     std::vector<int> p;
     std::string encodeString;
     if(compression_type == PNG)
@@ -47,16 +54,6 @@ void YarpJS_Image::compress(int compression_quality)
       p.push_back(cv::IMWRITE_JPEG_QUALITY);
       p.push_back(compression_quality);
       encodeString = ".jpg";
-    }
-
-    int imgPixelCode = this->getYarpObj()->getPixelCode();
-    if (imgPixelCode != VOCAB_PIXEL_BGR
-        && imgPixelCode != VOCAB_PIXEL_BGRA) {
-        auto conversionCodePtr = yarpCode2colorConvCode.find(imgPixelCode);
-        if (conversionCodePtr == yarpCode2colorConvCode.end()) {
-            throw std::out_of_range("YarpJS_Image::compress(int compression_quality): pixel code not supported");
-        }
-        cv::cvtColor(internalImage, internalImage, conversionCodePtr->second, 0);
     }
 
     cv::imencode(encodeString,internalImage, internalBuffer, p);
