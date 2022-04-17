@@ -14,26 +14,13 @@ using namespace v8;
 
 Nan::Persistent<v8::FunctionTemplate>  YarpJS_Image::constructor;
 
-
-
 void YarpJS_Image::compress(int compression_quality)
 {
-  static const std::map<int,int> yarpCode2colorConvCode {
-      {VOCAB_PIXEL_MONO,cv::COLOR_GRAY2BGR},
-      {VOCAB_PIXEL_RGB,cv::COLOR_RGB2BGR},
-      {VOCAB_PIXEL_RGBA,cv::COLOR_RGBA2BGRA},
-      {VOCAB_PIXEL_HSV,cv::COLOR_HSV2BGR_FULL},
-      {VOCAB_PIXEL_ENCODING_BAYER_GRBG8,cv::COLOR_BayerGR2BGR},
-      {VOCAB_PIXEL_ENCODING_BAYER_BGGR8,cv::COLOR_BayerBG2BGR},
-      {VOCAB_PIXEL_ENCODING_BAYER_GBRG8,cv::COLOR_BayerGB2BGR},
-      {VOCAB_PIXEL_ENCODING_BAYER_RGGB8,cv::COLOR_BayerRG2BGR},
-      {VOCAB_PIXEL_YUV_420,cv::COLOR_YUV2BGR_I420},
-      {VOCAB_PIXEL_YUV_422,cv::COLOR_YUV2BGR_Y422}
-  };
-
   if(!this->isCompressed)
   {
-    internalImage = cv::cvarrToMat((IplImage *) this->getYarpObj()->getIplImage());
+    yarp::sig::ImageOf<yarp::sig::PixelBgra> pixelTypedImage;
+    pixelTypedImage.copy(*this->getYarpObj());
+    internalImage = yarp::cv::toCvMat<yarp::sig::PixelBgra>(pixelTypedImage);
     std::vector<int> p;
     std::string encodeString;
     if(compression_type == PNG)
@@ -47,16 +34,6 @@ void YarpJS_Image::compress(int compression_quality)
       p.push_back(cv::IMWRITE_JPEG_QUALITY);
       p.push_back(compression_quality);
       encodeString = ".jpg";
-    }
-
-    int imgPixelCode = this->getYarpObj()->getPixelCode();
-    if (imgPixelCode != VOCAB_PIXEL_BGR
-        && imgPixelCode != VOCAB_PIXEL_BGRA) {
-        auto conversionCodePtr = yarpCode2colorConvCode.find(imgPixelCode);
-        if (conversionCodePtr == yarpCode2colorConvCode.end()) {
-            throw std::out_of_range("YarpJS_Image::compress(int compression_quality): pixel code not supported");
-        }
-        cv::cvtColor(internalImage, internalImage, conversionCodePtr->second, 0);
     }
 
     cv::imencode(encodeString,internalImage, internalBuffer, p);
