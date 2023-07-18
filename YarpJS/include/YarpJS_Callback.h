@@ -6,7 +6,7 @@
 
 #include <nan.h>
 
-#include <yarp/os/Mutex.h>
+#include <mutex>
 #include "YarpJS.h"
 
 
