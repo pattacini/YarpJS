@@ -21,6 +21,12 @@ private:
         Nan::SetPrototypeMethod(tpl, "fromBinary", FromBinary);
         Nan::SetPrototypeMethod(tpl, "getObjType", GetObjType);
         Nan::SetPrototypeMethod(tpl, "copy", Copy);
+        Nan::SetPrototypeMethod(tpl, "getFrequency", GetFrequency);
+        Nan::SetPrototypeMethod(tpl, "getSamples", GetSamples);
+        Nan::SetPrototypeMethod(tpl, "getBytesPerSample", GetBytesPerSample);
+        Nan::SetPrototypeMethod(tpl, "getChannels", GetChannels);
+        Nan::SetPrototypeMethod(tpl, "setFrequency", SetFrequency);
+        Nan::SetPrototypeMethod(tpl, "resize", Resize);
     }
 
 public:
@@ -44,6 +50,12 @@ public:
     static NAN_METHOD(FromBinary);
     static NAN_METHOD(GetObjType);
     static NAN_METHOD(Copy);
+    static NAN_METHOD(GetFrequency);
+    static NAN_METHOD(GetSamples);
+    static NAN_METHOD(GetBytesPerSample);
+    static NAN_METHOD(GetChannels);
+    static NAN_METHOD(SetFrequency);
+    static NAN_METHOD(Resize);
 
     // NAN Stuff
     YARPJS_INIT(YarpJS_Sound,"Sound",YarpJS)
