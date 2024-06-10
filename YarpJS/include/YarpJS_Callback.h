@@ -122,7 +122,7 @@ void YarpJS_Callback<T>::_internal_worker_end(uv_work_t *req, int status)
     
     (tmp_this->parent->*(tmp_this->prepareCallback))(tmp_arguments);
     
-    tmp_this->callback->Call(tmp_arguments.size(),tmp_arguments.data());
+    Nan::Call(*tmp_this->callback, tmp_arguments.size(), tmp_arguments.data());
 
     tmp_this->mutex_callback.unlock();
 }
