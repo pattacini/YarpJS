@@ -1,6 +1,6 @@
 {
   "name": "YarpJS",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "author": "Carlo Ciliberto <cciliber@gmail.com>",
   "description": "JS bindings for YARP",
   "dependencies": {
