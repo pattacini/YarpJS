@@ -246,10 +246,7 @@
 
           var left = e2.inputBuffer.getChannelData(0);
           var hh = convertFloat32ToInt16(left);
-
-          // socket.emit('stream-audio',{buffer:hh});
-          port_mic_out.write(hh);
-
+          port_mic_out.write({buffer: hh, samples: e2.inputBuffer.length, frequency: e2.inputBuffer.sampleRate, channels: e2.inputBuffer.numberOfChannels});
         }
 
         audioInput.connect(recorder);

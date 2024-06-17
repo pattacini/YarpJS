@@ -9,7 +9,7 @@
     "jquery": "latest",
     "nan": "latest",
     "socket.io": "latest",
-    "socket.io-stream": "latest",
+    "socket.io-stream": "^0.5.3",
     "three": ">=0.125.0"
   },
   "scripts": {

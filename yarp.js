@@ -100,7 +100,8 @@ yarp.Sound = function Sound(_sound) {
             _sound.copy(obj);
         else
         {
-            _sound.fromBinary(obj);
+            let {buffer, samples, frequency, channels} = obj;
+            _sound.fromBinary(buffer, samples, frequency, channels);
         }
     }
 
@@ -109,7 +110,11 @@ yarp.Sound = function Sound(_sound) {
 
         return {
             obj_type: _sound.getObjType(),
-            content: _sound.toBinary()
+            content: _sound.toBinary(),
+            frequency: _sound.getFrequency(),
+            samples: _sound.getSamples(),
+            channels: _sound.getChannels(),
+            width: _sound.getBytesPerSample()
         };
     }
 
